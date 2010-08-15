@@ -1,0 +1,43 @@
+class File
+  def self.xform!(file_name, &block)
+    base_name, extension = File.basename_ext(file_name)
+    
+    block = Proc.new {|name| name} if not block_given?
+    new_base_name = block.call(base_name)
+    
+    directory_name = File.dirname(file_name)
+    
+    File.rename(File.join(directory_name, "#{base_name}#{extension}"),
+            File.join(directory_name, "#{new_base_name}#{extension}"))
+  end
+  
+  def self.bubble_mv!(root_dir, file)
+    return if root_dir.eql? File.dirname(file)
+    new_name = "#{File.basename(File.dirname(file))}-#{File.basename(file)}"
+    new_full_name = File.join(
+            File.dirname(File.dirname(file)),
+            new_name)
+    File.rename(file, new_full_name)
+    Dir.delete(File.dirname(file)) if Dir.empty?(File.dirname(file))
+    self.bubble_mv!(root_dir, new_full_name)
+  end
+  
+  def self.change_name!(file_name, name)
+    base_name = File.basename(file_name)
+    base_name =~ /^(.+?)(\.[a-zA-Z0-9]+)$/
+    extension = $2
+    
+    File.rename(file_name,
+          File.join(File.dirname(file_name), "#{name}#{extension}"))
+  end
+  
+  def self.basename_ext(file)
+    base_name = File.basename(file)
+    base_name =~ /^(.+?)(\.[a-zA-Z0-9]+)$/
+    [$1.nil? ? base_name : $1, $2]
+  end
+  
+  def self.image?(file)
+    ['.jpg', '.jpeg', '.png', '.gif'].include? File.basename_ext(file)[1]
+  end
+end
