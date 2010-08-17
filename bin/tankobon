@@ -12,24 +12,13 @@ in order to make them optimal on the Kindle DX.
 
 Usage:
     tankobon [options] [<filename>]
-where [options] are:
+where [<filename>] is the recipe file to make your Tankobons and [options] are:
 EOS
-
-  opt :batch,   "Uses batch mode: moves all files to " <<
-                "#{File.join(Tankobon::WORK_PATH, '<s>')}", :type => :string
-  opt :open,    "Opens the WORK_PATH directory"
-  opt :recipe,  "Uses recipe file", :type => :string
 end
 
-if opts[:open_given] then
-  puts Tankobon::Application.methods.sort.join("\n")
-  %x[open #{Tankobon::WORK_PATH}]
+if ARGV.length.eql? 1 then
+  eval(File.new(File.expand_path(ARGV[0])).read, binding, __FILE__, __LINE__)
   exit(1)
-elsif opts[:recipe_given] then
-  eval(File.new(File.expand_path(opts[:recipe])).read, binding, __FILE__, __LINE__)
-  exit(1)
+else
+  Tankobon::CLI.message "Please provide a recipe file."
 end
-
-app = Tankobon::Application.new(Dir.pwd)
-app.use_opts! opts
-app.process_dir!

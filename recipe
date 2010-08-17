@@ -1,28 +1,13 @@
 Tankobon::Application.make do |a|
   a.clear!
   
-  a.dir = File.expand_path('~/TorrentDownloads/21st Century Boys')
+  a.set :dir, File.expand_path('~/TorrentDownloads/21st Century Boys')
   
-  a.files = <<-EOS
+  a.set :files, <<-EOS
   21st_Century_Boys_v01_c01[Obxist]
   21st_Century_Boys_v01_c02[Obxist].zip
-  21st_Century_Boys_v01_c03[Obxist].zip
-  21st_Century_Boys_v01_c04[Obxist].zip
-  21st_Century_Boys_v01_c05[Obxist].zip
-  21st_Century_Boys_v01_c06[Obxist].zip
-  21st_Century_Boys_v01_c07[Obxist].zip
-  21st_Century_Boys_v01_c08[Obxist].zip
-  21st_Century_Boys_v02_c09[Obxist].zip
-  21st_Century_Boys_v02_c10[Obxist].zip
-  21st_Century_Boys_v02_c11[Obxist].zip
-  21st_Century_Boys_v02_c12[Obxist].zip
-  21st_Century_Boys_v02_c13[Obxist].zip
-  21st_Century_Boys_v02_c14[Obxist].zip
-  21st_Century_Boys_v02_c15[Obxist].zip
-  21st_Century_Boys_v02_c16[end][Obxist].zip
   EOS
   .split("\n").each {|s| s.strip!}
   
-  a.batch = "21cb"
-  a.batch_given = true
+  #a.set :batch, "21cb"
 end.process_files!

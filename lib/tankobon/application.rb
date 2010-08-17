@@ -1,21 +1,17 @@
 module Tankobon
   class Application
-    attr_accessor :batch
-    attr_accessor :batch_given
-    attr_accessor :dir
-    attr_accessor :files
     
     def self.make(&block)
-      a = Tankobon::Application.new(Dir.pwd)
-      block.call(a)
-      a.make_batch_dir! if a.batch_given
-      a
+      Tankobon::Application.new(&block)
     end
     
-    def initialize(dir)
+    def initialize(&block)
       @filename_count = 0
+      @options = {}
       FileUtils.mkdir_p Tankobon::WORK_PATH unless 
         File.exists? Tankobon::WORK_PATH
+      config_defaults!()
+      block.call(self)
     end
     
     def clear!
@@ -24,18 +20,24 @@ module Tankobon
         File.exists? Tankobon::WORK_PATH
     end
     
-    def use_opts!(opts={})
-      opts[:batch] ||= nil
-      opts[:batch_given] ||= false
-      @dir = dir
-      @batch = opts[:batch]
-      @batch_given = opts[:batch_given]
-      a.make_batch_dir! if @batch_given
+    def config_defaults!()
+      set :batch, nil
+      set :dir, Dir.pwd
     end
     
-    def make_batch_dir!
-      FileUtils.mkdir_p File.join(Tankobon::WORK_PATH, @batch) unless 
-        File.exists? File.join(Tankobon::WORK_PATH, @batch)
+    def set(key, value)
+      @options[key.to_sym] = value
+      self.send("setup_option_#{key.to_s}!".to_sym) if
+        self.respond_to? "setup_option_#{key.to_s}!"
+    end
+    
+    def get(key)
+      @options[key.to_sym]
+    end
+        
+    def setup_option_batch!
+      FileUtils.mkdir_p File.join(Tankobon::WORK_PATH, get(:batch)) unless 
+        File.exists? File.join(Tankobon::WORK_PATH, get(:batch))
     end
     
     def rename_batch!(archive)
@@ -43,31 +45,22 @@ module Tankobon
       Dir.foreach(archive.directory) do |file|
         next if file =~ /^\..*$/
         File.rename(File.join(archive.directory, file), \
-        File.join(Tankobon::WORK_PATH, @batch, file))
+        File.join(Tankobon::WORK_PATH, get(:batch), file))
       end
     end
 
     def process_files!
-      @files.each do |archive|
-        Tankobon::Archive.make(File.join(@dir, archive), @filename_count) do |a|
-          a.sanitize!
-          a.process_images!
-          rename_batch! a if @batch_given
-        end # / Tankobon::Archive
-      end
-    end
-
-    def process_dir!
-      Dir.foreach(@dir) do |archive|
-        next if archive =~ /^\..*$/
+      get(:files).each do |archive|
         next unless 
           ['.zip', '.cbz', '.rar', '.cbr', nil]
           .include? File.basename_ext(archive)[1]
-        Tankobon::Archive.make(File.join(@dir, archive), @filename_count) do |a|
+          
+        Tankobon::Archive.make(File.join(get(:dir), archive), @filename_count) do |a|
           a.sanitize!
-          #a.process_images!
-          rename_batch! a if @batch_given
+          a.process_images!
+          rename_batch! a unless get(:batch).nil?
         end # / Tankobon::Archive
+        
       end
     end
     
