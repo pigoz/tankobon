@@ -26,12 +26,10 @@ task :release => :build do
 end
 
 Spec::Rake::SpecTask.new(:spec) do |t|
-  #require 'spec/spec_helper'
   t.spec_files = Dir.glob('spec/**/*_spec.rb')
 end
 
 Spec::Rake::SpecTask.new(:specdoc) do |t|
-  #require 'spec/spec_helper'
   t.spec_files = Dir.glob('spec/**/*_spec.rb')
   t.spec_opts << '--format specdoc'
 end

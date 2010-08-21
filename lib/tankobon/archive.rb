@@ -88,5 +88,5 @@ module Tankobon
        end
     end # /def sanitize!
     
-  end # /class
-end # /module
+  end
+end
