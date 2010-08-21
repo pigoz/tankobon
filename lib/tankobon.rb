@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'tankobon/open-classes/file.rb'
 require 'tankobon/open-classes/dir.rb'
+require 'tankobon/optionsmap'
 require 'tankobon/version'
 require 'tankobon/variables'
 
