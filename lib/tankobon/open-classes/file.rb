@@ -18,7 +18,6 @@ class File
             File.dirname(File.dirname(file)),
             new_name)
     File.rename(file, new_full_name)
-    Dir.delete(File.dirname(file)) if Dir.empty?(File.dirname(file))
     self.bubble_mv!(root_dir, new_full_name)
   end
   

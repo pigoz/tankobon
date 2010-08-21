@@ -6,12 +6,7 @@ module Tankobon
     attr_accessor :filename_count
     attr_reader :directory
     
-    def self.make(file, count = 0, &block)
-      a = Tankobon::Archive.new(file, count)
-      block.call(a)
-    end
-    
-    def initialize(file, count = 0)
+    def initialize(file, count = 0, &block)
       FileUtils.mkdir_p Tankobon::WORK_PATH unless
         File.exists? Tankobon::WORK_PATH
       @directory = File.join(Tankobon::WORK_PATH, File.basename_ext(file)[0])
@@ -24,6 +19,7 @@ module Tankobon
       end
       
       @filename_count = count
+      block.call(self) if block_given?
     end
     
     # Extracts the input file to the \_@directory_ path
@@ -81,13 +77,17 @@ module Tankobon
       end
       
       Dir.xplore(@directory) do |x|
-        File.delete x unless File.image? x
+        FileUtils.rm_rf x if File.directory? x
       end
       
       Dir.xplore(@directory) do |x|
-        File.change_name!(x, "%05d" % @filename_count)
-        @filename_count += 1
+        File.delete x unless File.image? x
       end
+      
+      Dir.entries(@directory).select{|x| not x =~ /^\..*$/}.each do |x|
+         File.change_name!(File.join(@directory, x), "%05d" % @filename_count)
+         @filename_count += 1
+       end
     end # /def sanitize!
     
   end # /class

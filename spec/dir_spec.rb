@@ -1,6 +1,4 @@
-require 'spec'
-require 'tankobon'
-require 'fileutils'
+require 'spec_helper'
 
 describe Dir do
   before(:each) do
@@ -12,7 +10,7 @@ describe Dir do
   end
   
   it "should recognize an empty directory" do
-    Dir.empty?('test').should == true
+    Dir.should be_empty('test')
   end
   
   it "should explore a directory tree" do
@@ -23,8 +21,8 @@ describe Dir do
     Dir.xplore('test') do |f|
       exploration << f
     end
-    exploration.join(":")\
-      .should == 'test/a/aa/file_name1.ext:test/a/aa:test/a:test/b'
+    exploration.should =~ ['test/a/aa/file_name1.ext', 
+                           'test/a/aa', 'test/a', 'test/b']
   end
   
 end

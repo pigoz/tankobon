@@ -1,17 +1,13 @@
 module Tankobon
   class Application
     
-    def self.make(&block)
-      Tankobon::Application.new(&block)
-    end
-    
     def initialize(&block)
       @filename_count = 0
       @options = {}
       FileUtils.mkdir_p Tankobon::WORK_PATH unless 
         File.exists? Tankobon::WORK_PATH
       config_defaults!()
-      block.call(self)
+      block.call(self) if block_given?
     end
     
     def clear!
@@ -23,6 +19,7 @@ module Tankobon
     def config_defaults!()
       set :batch, nil
       set :dir, Dir.pwd
+      set :im, true
     end
     
     def set(key, value)
@@ -36,6 +33,7 @@ module Tankobon
     end
         
     def setup_option_batch!
+      return if get(:batch).nil?
       FileUtils.mkdir_p File.join(Tankobon::WORK_PATH, get(:batch)) unless 
         File.exists? File.join(Tankobon::WORK_PATH, get(:batch))
     end
@@ -55,9 +53,9 @@ module Tankobon
           ['.zip', '.cbz', '.rar', '.cbr', nil]
           .include? File.basename_ext(archive)[1]
           
-        Tankobon::Archive.make(File.join(get(:dir), archive), @filename_count) do |a|
+        Tankobon::Archive.new(File.join(get(:dir), archive), @filename_count) do |a|
           a.sanitize!
-          a.process_images!
+          a.process_images! if get(:im)
           rename_batch! a unless get(:batch).nil?
         end # / Tankobon::Archive
         

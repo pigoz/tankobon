@@ -1,13 +1,13 @@
-Tankobon::Application.make do |a|
+Tankobon::Application.new do |a|
   a.clear!
   
-  a.set :dir, File.expand_path('~/TorrentDownloads/21st Century Boys')
+  a.set :dir, File.expand_path('~/TorrentDownloads/Monster')
   
   a.set :files, <<-EOS
-  21st_Century_Boys_v01_c01[Obxist]
-  21st_Century_Boys_v01_c02[Obxist].zip
+  Monster_v01[MS].zip
   EOS
   .split("\n").each {|s| s.strip!}
   
-  #a.set :batch, "21cb"
+  #a.set :batch, "monster"
+  a.set :im, false
 end.process_files!
