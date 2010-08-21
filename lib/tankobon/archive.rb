@@ -47,20 +47,18 @@ module Tankobon
       opts[:size] ||= '824x1200'
       opts[:colorspace] ||= 'Gray'
       
-      w = %x[identify -format "%w" "#{old_file}"].to_i
-      h = %x[identify -format "%h" "#{old_file}"].to_i
-      
+      w, h = %x[identify -format "%wx%h" "#{old_file}"]
+        .split('x').map!{|x| x.to_i}
+            
       if w > h then
-        %x[convert -define jpeg:size=#{opts[:size]} "#{old_file}" -rotate 90 \
-          -thumbnail '#{opts[:size]}>' -background white -gravity center \
-          -extent #{opts[:size]} -colorspace #{opts[:colorspace]} \
-          jpeg:"#{new_file}"
+        %x[convert "#{old_file}" -format jpg -rotate 90 \
+          -colorspace #{opts[:colorspace]} -resize #{opts[:size]} \
+          -background white -gravity center -extent #{opts[:size]} "#{new_file}"
         ]
       elsif
-        %x[convert -define jpeg:size=#{opts[:size]} "#{old_file}" \
-          -thumbnail '#{opts[:size]}>' -background white -gravity center \
-          -extent #{opts[:size]} -colorspace #{opts[:colorspace]} \
-          jpeg:"#{new_file}"
+        %x[convert "#{old_file}" -format jpg \
+          -colorspace #{opts[:colorspace]} -resize #{opts[:size]} \
+          -background white -gravity center -extent #{opts[:size]} "#{new_file}"
         ]
       end
     end

@@ -9,5 +9,5 @@ Tankobon::Application.new do |a|
   .split("\n").each {|s| s.strip!}
   
   #a.set :batch, "monster"
-  a.set :im, false
+  #a.set :im, false
 end.process_files!
