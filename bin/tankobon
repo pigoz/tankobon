@@ -16,9 +16,17 @@ where [<filename>] is the recipe file to make your Tankobons and [options] are:
 EOS
 end
 
-if ARGV.length.eql? 1 then
-  eval(File.new(File.expand_path(ARGV[0])).read, binding, __FILE__, __LINE__)
-  exit(1)
-else
-  Tankobon::CLI.message "Please provide a recipe file."
+begin
+  if ARGV.length.eql? 1 then
+    Tankobon::Application.new do |a|
+      eval(File.new(File.expand_path(ARGV[0])).read,
+                    binding, __FILE__, __LINE__)
+    end.process_files!
+    exit
+  else
+    Tankobon::CLI.message "Please provide a recipe file."
+  end
+rescue Interrupt => e
+  Tankobon::CLI.message "\nRecived an interrupt. Quitting."
+  exit
 end

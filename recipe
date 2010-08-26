@@ -1,13 +1,11 @@
-Tankobon::Application.new do |a|
-  a.clear!
-  
-  a.set :dir, File.expand_path('~/TorrentDownloads/Monster')
-  
-  a.set :files, <<-EOS
-  Monster_v01[MS].zip
-  EOS
-  .split("\n").each {|s| s.strip!}
-  
-  #a.set :batch, "monster"
-  #a.set :im, false
-end.process_files!
+clear!
+
+set :dir, File.expand_path('~/TorrentDownloads/Monster')
+
+set :files, <<-EOS
+Monster_v01[MS].zip
+EOS
+.split("\n").each {|s| s.strip!}
+
+#set :batch, "monster"
+#set :im, false

@@ -9,7 +9,7 @@ module Tankobon
       FileUtils.mkdir_p Tankobon::WORK_PATH unless 
         File.exists? Tankobon::WORK_PATH
       config_defaults!()
-      block.call(self) if block_given?
+      instance_eval(&block) if block_given?
     end
     
     def config_defaults!()
