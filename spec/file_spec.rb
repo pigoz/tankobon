@@ -21,7 +21,7 @@ describe File do
     File.basename_ext("test/filename.ext").should =~ ['filename', '.ext']
   end
   
-  it "should move files to root directory and delete empty directories" do
+  it "should move files to root directory and not delete empty directories" do
     FileUtils.mkdir_p 'test/a/b'
     Dir.chdir('test/a/b') { File.open("file_name1.ext", "w").close() }
     File.bubble_mv!('test', "test/a/b/file_name1.ext")
@@ -30,8 +30,8 @@ describe File do
     
     File.should_not exists 'test/a/b/file_name1.ext'
     File.should_not exists 'test/a/file_name1.ext'
-    File.should_not exists 'test/a/b'
-    File.should_not exists 'test/a'
+    File.should exists 'test/a/b'
+    File.should exists 'test/a'
   end
   
   it "should change names" do

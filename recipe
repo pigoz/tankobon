@@ -3,9 +3,10 @@ clear!
 set :dir, File.expand_path('~/TorrentDownloads/Monster')
 
 set :files, <<-EOS
-Monster_v01[MS].zip
+Monster_v15[MS].zip
+Monster_v16[MS].zip
 EOS
 .split("\n").each {|s| s.strip!}
 
-#set :batch, "monster"
+#set :batch, "Beck_v33"
 #set :im, false

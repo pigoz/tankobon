@@ -1,7 +1,7 @@
 module Tankobon
   class Application
     
-    include OptionsMap
+    acts_as_options_map
     
     def initialize(&block)
       @filename_count = 0
