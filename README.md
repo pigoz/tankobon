@@ -16,15 +16,19 @@ perform for you. Here is an example of a recipe file:
 
 	clear!
 
-	set :dir, File.expand_path('~/TorrentDownloads/Monster')
+	set :dir, File.expand_path('~/Monster/')
 
 	set :files, <<-EOS
-	Monster_v01[MS].zip
-	Monster_v02[MS].zip
+	Monster_v16.zip
+	Monster_v17.zip
 	EOS
 	.split("\n").each {|s| s.strip!}
 
-	set :batch, "monster"
+	set :batch, "monster" 
+	#set :im, false
+	
+	#set :colorspace, "RGB"
+	#set :size, "824x1200"
 
 With the clear method you will remove all the content of the directory with the
 final files (~/tankobon/).
@@ -36,3 +40,6 @@ With the set method you can give value to some properties that are used to custo
 and plain directories too!
 *  **:batch** => activates batchmode merging all archives into one and saving
 the processing result into the directory given as argument. Very handy to deal with archives that contains only one chapter.
+*  **:im** => enables or disables the processing of images. If disabled the script will only rename the images.
+*  **:colorspace** => the colorspace you want your images to be saved with (i.e.: "Gray", "RGB")
+*  **:size** => the size you want your images to be saved with in width*x*height format
