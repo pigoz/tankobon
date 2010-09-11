@@ -32,7 +32,26 @@ module OptionsMap
     end
   
     def get(key)  
-      instance_variable_get(:@options)[key.to_sym]
+      o = options
+      begin
+        return o.has_key?(key) ? o[key.to_sym] : nil
+      rescue NoMethodError, e
+        return nil
+      end
+    end
+    
+    def options
+      instance_variable_get(:@options) or 
+        instance_variable_set(:@options, {}) and instance_variable_get(:@options)
+    end
+  
+    def transfer(obj, filter=nil)
+      return if obj.nil? or obj.options.nil?
+      result = obj.options.inject(self.options) do |r, (k, v)|
+        r[k] = v if filter.nil? or filter.include? k
+        r
+      end
+      instance_variable_set(:@options, result)
     end
     
     def defaults
@@ -43,10 +62,9 @@ module OptionsMap
       self.class.instance_variable_get(:@defaults).each do |key, val|
         set key, val
       end
+      self
     end
     
   end #/ InstanceMethods
   
 end
-
-Object.extend OptionsMap::ClassMethods

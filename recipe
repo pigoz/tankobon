@@ -1,12 +1,14 @@
 clear!
 
-set :dir, File.expand_path('~/Monster')
+set :dir, File.expand_path('~/Monster/')
 
 set :files, <<-EOS
-Monster_v15.zip
 Monster_v16.zip
+Monster_v17.zip
 EOS
 .split("\n").each {|s| s.strip!}
 
 #set :batch, "monster"
 #set :im, false
+#set :colorspace, "RGB"
+#set :size, "824x1200"

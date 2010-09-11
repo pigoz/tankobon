@@ -2,20 +2,17 @@ module Tankobon
   class Application
     
     acts_as_options_map
+    add_default :batch, nil
+    add_default :dir, Dir.pwd
+    add_default :im, true
     
     def initialize(&block)
       @filename_count = 0
       @options = {}
       FileUtils.mkdir_p Tankobon::WORK_PATH unless 
         File.exists? Tankobon::WORK_PATH
-      config_defaults!()
+      apply_defaults!()
       instance_eval(&block) if block_given?
-    end
-    
-    def config_defaults!()
-      set :batch, nil
-      set :dir, Dir.pwd
-      set :im, true
     end
     
     def clear!
@@ -46,6 +43,7 @@ module Tankobon
           .include? File.basename_ext(archive)[1]
           
         Tankobon::Archive.new(File.join(get(:dir), archive), @filename_count) do |a|
+          a.transfer(self, [:colorspace, :size])
           a.sanitize!
           a.process_images! if get(:im)
           rename_batch! a unless get(:batch).nil?

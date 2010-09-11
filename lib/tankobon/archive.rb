@@ -6,7 +6,12 @@ module Tankobon
     attr_accessor :filename_count
     attr_reader :directory
     
+    acts_as_options_map
+    add_default :size, '824x1200' # Kindle DX's screen size
+    add_default :colorspace, 'Gray'
+    
     def initialize(file, count = 0, &block)
+      apply_defaults!
       FileUtils.mkdir_p Tankobon::WORK_PATH unless
         File.exists? Tankobon::WORK_PATH
       @directory = File.join(Tankobon::WORK_PATH, File.basename_ext(file)[0])
@@ -43,22 +48,19 @@ module Tankobon
       Tankobon::CLI.done
     end
     
-    def process_image!(old_file, new_file, opts = {})
-      opts[:size] ||= '824x1200'
-      opts[:colorspace] ||= 'Gray'
-      
+    def process_image!(old_file, new_file)  
       w, h = %x[identify -format "%wx%h" "#{old_file}"]
         .split('x').map!{|x| x.to_i}
             
       if w > h then
         %x[convert "#{old_file}" -format jpg -rotate 90 \
-          -colorspace #{opts[:colorspace]} -resize #{opts[:size]} \
-          -background white -gravity center -extent #{opts[:size]} "#{new_file}"
+          -colorspace #{get(:colorspace)} -resize #{get(:size)} \
+          -background white -gravity center -extent #{get(:size)} "#{new_file}"
         ]
       elsif
         %x[convert "#{old_file}" -format jpg \
-          -colorspace #{opts[:colorspace]} -resize #{opts[:size]} \
-          -background white -gravity center -extent #{opts[:size]} "#{new_file}"
+          -colorspace #{get(:colorspace)} -resize #{get(:size)} \
+          -background white -gravity center -extent #{get(:size)} "#{new_file}"
         ]
       end
     end
