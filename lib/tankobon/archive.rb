@@ -24,7 +24,8 @@ module Tankobon
       end
       
       @filename_count = count
-      block.call(self) if block_given?
+      block.arity < 1 ? self.instance_eval(&block) : block.call(self) if
+        block_given?
     end
     
     # Extracts the input file to the \_@directory_ path
