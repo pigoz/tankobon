@@ -1,4 +1,4 @@
-require 'spec'
+require 'rspec'
 require 'fileutils'
 
 require File.join(File.dirname(File.dirname(__FILE__)), "lib", "tankobon.rb")
