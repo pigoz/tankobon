@@ -18,7 +18,7 @@ end
 
 begin
   if ARGV.length.eql? 1 then
-    Tankobon::Application.new do |a|
+    Tankobon::Application.new do
       eval(File.new(File.expand_path(ARGV[0])).read,
                     binding, __FILE__, __LINE__)
     end.process_files!
