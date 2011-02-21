@@ -1,10 +1,9 @@
 require 'fileutils'
 require 'pathname'
 
-Dir[File.dirname(__FILE__) + '/ext/*.rb'].each do |file| 
-  require File.basename(file, File.extname(file))
-end
-
+require 'tankobon/ext/dir'
+require 'tankobon/ext/file'
+require 'tankobon/optionsmap'
 require 'tankobon/version'
 
 module Tankobon
