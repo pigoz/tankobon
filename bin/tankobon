@@ -8,7 +8,7 @@ opts = Trollop::options do
   version "tankobon #{Tankobon::VERSION} (c) 2010 Stefano Pigozzi"
   banner <<-EOS
 This program lets you batch rename, resize and change colorspace for manga scans
-in order to make them optimal for consumptions on ebook readers.
+in order to make them optimal for consumption on ebook readers.
 
 Usage:
     tankobon [options] [<filename>]
