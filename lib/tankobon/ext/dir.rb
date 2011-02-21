@@ -1,8 +1,8 @@
 class Dir
   def self.xplore(dir, &block)
-    block = Proc.new {|f| puts "Got: #{f}"} if block.nil?
+    block = Proc.new {|f| puts "got: #{f}"} if block.nil?
     Dir.foreach(dir) do |f|
-      next if f =~ /^\..*$/
+      next if f[0] == '.'
       if File.directory? File.join(dir, f)
         Dir.xplore(File.join(dir, f), &block)
         block.call(File.join(dir, f))
