@@ -1,5 +1,5 @@
 module Tankobon
-  class Sanitizer
+  class DefaultSanitizer
     
     def self.sanitize(name)
       if not name =~ /[0-9]+/ then

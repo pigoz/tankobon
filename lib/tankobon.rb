@@ -7,10 +7,10 @@ require 'tankobon/optionsmap'
 require 'tankobon/version'
 
 module Tankobon
-  autoload :Application,     'tankobon/application'
-  autoload :Archive,         'tankobon/archive'
-  autoload :CLI,             'tankobon/cli'
-  autoload :Directory,       'tankobon/directory'
-  autoload :Sanitizer,       'tankobon/sanitizer'
-  autoload :StagedDirectory, 'tankobon/stageddirectory'
+  autoload :Application,        'tankobon/application'
+  autoload :Archive,            'tankobon/archive'
+  autoload :CLI,                'tankobon/cli'
+  autoload :DefaultSanitizer,   'tankobon/defaultsanitizer'
+  autoload :Directory,          'tankobon/directory'
+  autoload :StagedDirectory,    'tankobon/stageddirectory'
 end
