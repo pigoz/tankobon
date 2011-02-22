@@ -18,7 +18,7 @@ describe File do
   end
   
   it "should recognize filenames and extensions" do
-    File.basename_ext("test/filename.ext").should =~ ['filename', '.ext']
+    File.splitbase("test/filename.ext").should =~ ['filename', '.ext']
   end
   
   it "should move files to root directory and not delete empty directories" do

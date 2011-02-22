@@ -1,6 +1,6 @@
 class File
   def self.xform!(file_name, &block)
-    base_name, extension = File.basename_ext(file_name)
+    base_name, extension = File.splitbase(file_name)
     
     block = Proc.new {|name| name} if not block_given?
     new_base_name = block.call(base_name)
@@ -30,13 +30,11 @@ class File
           File.join(File.dirname(file_name), "#{name}#{extension}"))
   end
   
-  def self.basename_ext(file)
-    base_name = File.basename(file)
-    base_name =~ /^(.+?)(\.[a-zA-Z0-9]+)$/
-    [$1.nil? ? base_name : $1, $2]
+  def self.splitbase(file)
+    [File.basename(file, ".*"), File.extname(file)]
   end
   
   def self.image?(file)
-    ['.jpg', '.jpeg', '.png', '.gif'].include? File.basename_ext(file)[1]
+    ['.jpg', '.jpeg', '.png', '.gif'].include? File.splitbase(file)[1]
   end
 end
