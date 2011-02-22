@@ -11,7 +11,7 @@ describe File do
   
   it "should transform files" do
     File.open("test/file_name.ext", "w")
-    File.xform!("test/file_name.ext") do |file|
+    File.xform("test/file_name.ext") do |file|
       file.upcase
     end
     File.should exists "test/FILE_NAME.ext"
@@ -24,7 +24,7 @@ describe File do
   it "should move files to root directory and not delete empty directories" do
     FileUtils.mkdir_p 'test/a/b'
     Dir.chdir('test/a/b') { File.open("file_name1.ext", "w").close() }
-    File.bubble_mv!('test', "test/a/b/file_name1.ext")
+    File.bubble_mv('test', "test/a/b/file_name1.ext")
     
     File.should exists 'test/a-b-file_name1.ext'
     
@@ -36,7 +36,7 @@ describe File do
   
   it "should change names" do
     File.open("test/file_name.ext", "w")
-    File.change_name!("test/file_name.ext", "file_name2")
+    File.rnbase("test/file_name.ext", "file_name2")
     File.should exists "test/file_name2.ext"
   end
   
