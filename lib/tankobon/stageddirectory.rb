@@ -5,8 +5,19 @@ module Tankobon
     end
     
     def sanitize(sanitizer=DefaultSanitizer)
-      list = Dir.glob(File.join("**", "*.{jpg,jpeg,gif,png}"))
-      sanitizer.sanitize
+      dir_listing = Dir.glob(File.join(@stage, "**", "*"))
+      dir_listing.sort {|a,b| b <=> a}.each do |file|
+        File.xform(file) do
+          sanitizer.sanitize(File.splitbase(file)[0])
+        end
+      end
+    end
+    
+    def mv_images_to_root(renamer=SequenceRenamer)
+      # todo
+    end
+    
+    def clean()
       # todo
     end
     
