@@ -27,9 +27,10 @@ end
 
 RSpec::Core::RakeTask.new(:spec) do |t|
   t.pattern = 'spec/**/*_spec.rb'
+  t.rspec_opts = ['--color']
 end
 
 RSpec::Core::RakeTask.new(:specdoc) do |t|
   t.pattern = 'spec/**/*_spec.rb'
-  t.rspec_opts = ['--format documentation']
+  t.rspec_opts = ['--color --format documentation']
 end
