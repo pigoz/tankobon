@@ -12,5 +12,6 @@ module Tankobon
   autoload :CLI,                'tankobon/cli'
   autoload :DefaultSanitizer,   'tankobon/defaultsanitizer'
   autoload :Directory,          'tankobon/directory'
+  autoload :Stageable,          'tankobon/stageable'
   autoload :StagedDirectory,    'tankobon/stageddirectory'
 end

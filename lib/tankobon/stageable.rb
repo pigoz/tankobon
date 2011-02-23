@@ -3,15 +3,15 @@ require 'pathname'
 module Tankobon
   class Stageable
     def initialize(stageable)
-      @stageable = stageable
+      @stageable = Pathname.new(stageable)
     end
     
     def stage_root
       Pathname.new("~/tankobon2")
     end
     
-    def stage(stageable)
-      stage_root + stageable.basename('.*')
+    def stage
+      stage_root + @stageable.basename('.*')
     end
     
     def to_stage(&block)
