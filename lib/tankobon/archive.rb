@@ -3,7 +3,7 @@ module Tankobon
     def to_stage
       super do
         FileUtils.mkdir_p(stage) unless stage.exist?
-        sh %{cd #{stage} && 7za x -r #{@stageable}} # uses 7ip to deflate
+        %x{cd #{stage.realpath} && 7za x -r #{@stageable.realpath}}
       end
     end
   end
