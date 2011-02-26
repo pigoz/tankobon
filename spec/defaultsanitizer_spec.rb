@@ -5,7 +5,7 @@ describe Tankobon::DefaultSanitizer do
     Tankobon::DefaultSanitizer.sanitize("foo").should == "00000-foo"
   end
   
-  it "should 5pad numbers and concat a minus and remove everything else" do
+  it "should zero pad numbers, concat a minus and remove everything else" do
     Tankobon::DefaultSanitizer.sanitize("Vol.3_Ch.1").should == "00003-00001"
     Tankobon::DefaultSanitizer.sanitize("-Vol.3_Ch.1").should == "00003-00001"
     Tankobon::DefaultSanitizer.sanitize("--Vol.3_Ch.1").should == "00003-00001"
