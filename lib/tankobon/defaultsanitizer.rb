@@ -9,6 +9,7 @@ module Tankobon
           .gsub(/([^0-9\-]+)/){""} \
           .gsub(/(\-+)/){"-"} \
           .gsub(/(\-$)/){""}
+          .gsub(/(^\-)/){""}
       end
     end
     
