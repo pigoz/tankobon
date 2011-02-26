@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'pathname'
 
+require 'tankobon/ext/string'
 require 'tankobon/ext/dir'
 require 'tankobon/ext/file'
 require 'tankobon/optionsmap'
