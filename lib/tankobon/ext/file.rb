@@ -25,10 +25,10 @@ class File
   end
   
   def self.image?(file)
-    image_extensions.include? File.extname(file)
+    image_extensions.include? File.extname(file).tail
   end
   
   def self.image_extensions
-    ['.jpg', '.jpeg', '.png', '.gif']
+    ['jpg', 'jpeg', 'png', 'gif']
   end
 end
