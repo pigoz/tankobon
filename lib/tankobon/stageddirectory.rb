@@ -7,7 +7,7 @@ module Tankobon
     def sanitize(sanitizer=SanitizeTransform.new)
       dir_listing = Dir.glob(File.join(@stage, "**", "*"))
       dir_listing.sort {|a,b| b <=> a}.each do |file|
-      File.xform(file, &sanitizer)
+        File.xform(file, &sanitizer)
       end
     end
     
