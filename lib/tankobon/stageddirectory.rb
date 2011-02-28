@@ -1,5 +1,7 @@
-module Tankobon  
+module Tankobon
   class StagedDirectory
+    attr_reader :stage
+    
     def initialize(stage)
       @stage = Pathname.new(stage)
     end
