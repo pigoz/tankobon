@@ -33,7 +33,7 @@ describe Tankobon::StagedDirectory do
           File.dirname(arg),
           "#{tx.transform(File.basename(arg, '.*'))}#{File.extname(arg)}"))
     end
-    @class.new("test/stage/").sanitize(@upcasetx.new)
+    @class.new("test/stage/").sanitize(tx)
     FileUtils.rm_r("test")
   end
 end
