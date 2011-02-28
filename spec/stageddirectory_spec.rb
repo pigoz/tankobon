@@ -3,8 +3,7 @@ require 'spec_helper'
 describe Tankobon::StagedDirectory do
   before :all do
     @class = Tankobon::StagedDirectory
-    @upcasetx = Class.new do
-      def to_proc; method(:transform).to_proc; end
+    @upcasetx = Class.new(Tankobon::Transform) do
       def transform(input); input.upcase; end
     end
   end
