@@ -11,18 +11,21 @@ module Tankobon
       dir_listing.sort {|a,b| b <=> a}.each do |file|
         File.xform(file, &sanitizer)
       end
+      self
     end
     
     def rename_images(renamer=SequenceTransform.new)
       images.each do |file|
         File.xform(@stage + File.basename(file), &renamer)
       end
+      self
     end
     
     def mv_images_to(directory)
       images.each do |file|
         FileUtils.mv(file, Pathname.new(directory) + File.basename(file))
       end
+      self
     end
     
     def mv_images_to_root
@@ -30,9 +33,10 @@ module Tankobon
     end
     
     def clean
-      Dir.glob("*").each do |file|
+      Dir.glob(@stage + "*").each do |file|
         FileUtils.rm_r(file) unless File.image?(file)
       end
+      self
     end
     
     def images

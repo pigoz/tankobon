@@ -73,4 +73,21 @@ describe Tankobon::StagedDirectory do
     File.should exists 'test/stage/foo/bar2/baz2.foo'
     File.should_not exists 'test/stage/baz2.foo'
   end
+  
+  it "should clean the stage" do
+    @class.new("test/stage/").clean
+    Pathname.new("test/stage/").should be_directory
+    Pathname.new("test/stage/").entries.should =~ 
+      [ Pathname.new('.'), Pathname.new('..') ]
+    
+    FileUtils.mkdir_p("test/stage/foo/bar/baz.jpg")
+    FileUtils.mkdir_p("test/stage/foo/bar2/baz1.gif")
+    FileUtils.mkdir_p("test/stage/foo/bar2/baz2.foo")
+
+    @class.new("test/stage/").mv_images_to_root.clean
+    Pathname.new("test/stage/").entries.should =~ [
+      Pathname.new('.'), Pathname.new('..'),
+      Pathname.new('baz.jpg'), Pathname.new('baz1.gif')
+    ]
+  end
 end
