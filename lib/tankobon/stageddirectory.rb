@@ -19,10 +19,14 @@ module Tankobon
       end
     end
     
-    def mv_images_to_root
+    def mv_images_to(directory)
       images.each do |file|
-        FileUtils.mv(file, @stage + File.basename(file))
+        FileUtils.mv(file, Pathname.new(directory) + File.basename(file))
       end
+    end
+    
+    def mv_images_to_root
+      mv_images_to @stage
     end
     
     def clean
