@@ -6,17 +6,12 @@ module Tankobon
       @stage = Pathname.new(stage)
     end
     
-    def sanitize(sanitizer=SanitizeTransform.new)
-      dir_listing = Dir.glob(File.join(@stage, "**", "*"))
-      dir_listing.sort {|a,b| b <=> a}.each do |file|
-        File.xform(file, &sanitizer)
-      end
-      self
-    end
+    def rename_images(&block); rename(:images, &block); end
+    def rename_all(&block); rename(:all, &block); end
     
-    def rename_images(renamer=SequenceTransform.new)
-      images.each do |file|
-        File.xform(@stage + File.basename(file), &renamer)
+    def rename(what, &block)
+      send(what).each do |file|
+        File.xform(file, &block)
       end
       self
     end
@@ -37,6 +32,10 @@ module Tankobon
         FileUtils.rm_r(file) unless File.image?(file)
       end
       self
+    end
+    
+    def all
+      Dir.glob(File.join(@stage, "**", "*")).reverse
     end
     
     def images

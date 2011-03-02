@@ -23,7 +23,7 @@ describe Tankobon::StagedDirectory do
   end
 
   it "should sanitize every file in the stage" do
-    @class.new("test/stage/").sanitize(@upcasetx.new)
+    @class.new("test/stage/").rename_all(&@upcasetx.new)
     File.should exists "test/stage/FOO/BAR/BAZ.jpg"
     File.should exists "test/stage/FOO/BAR2/BAZ1.gif"
     File.should exists "test/stage/FOO/BAR2/BAZ2.foo"
@@ -46,7 +46,7 @@ describe Tankobon::StagedDirectory do
           File.dirname(arg),
           "#{tx.transform(File.basename(arg, '.*'))}#{File.extname(arg)}"))
     end
-    @class.new("test/stage/").sanitize(tx)
+    @class.new("test/stage/").rename_all(&tx)
   end
 
   it "should list images in the stage" do
