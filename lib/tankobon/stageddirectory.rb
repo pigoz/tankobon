@@ -6,9 +6,6 @@ module Tankobon
       @stage = Pathname.new(stage)
     end
     
-    def rename_images(&block); rename(:images, &block); end
-    def rename_all(&block); rename(:all, &block); end
-    
     def rename(what, &block)
       send(what).each do |file|
         File.xform(file, &block)
@@ -44,6 +41,15 @@ module Tankobon
     end
     
     def convert_images(converter=KindleDXConverter)
+      # todo
+    end
+    
+    def method_missing(name, *args, &block)
+      if name =~ /^rename_(\w+)$/
+        rename($1.to_sym, &block)
+      elsif
+        super
+      end
     end
   end
 end

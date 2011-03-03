@@ -6,6 +6,14 @@ describe Tankobon::StagedDirectory do
     @upcasetx = Class.new(Tankobon::Transform) do
       def transform(input); input.upcase; end
     end
+    @files = %w{
+      test/stage/foo/bar2/baz2.foo
+      test/stage/foo/bar2/baz1.gif
+      test/stage/foo/bar2
+      test/stage/foo/bar/baz.jpg
+      test/stage/foo/bar
+      test/stage/foo
+    }
   end
 
   before :each do
@@ -22,7 +30,18 @@ describe Tankobon::StagedDirectory do
     @class.new("test/stage").stage.should == Pathname.new("test/stage")
   end
 
-  it "should sanitize every file in the stage" do
+  it "should list all the files in the stage (bottom up)" do
+    @class.new("test/stage/").all =~ @files
+  end
+
+  it "should rename every file in the stage" do
+    @class.new("test/stage/").rename(:all, &@upcasetx.new)
+    File.should exists "test/stage/FOO/BAR/BAZ.jpg"
+    File.should exists "test/stage/FOO/BAR2/BAZ1.gif"
+    File.should exists "test/stage/FOO/BAR2/BAZ2.foo"
+  end
+  
+  it "should rename every file in the stage and be cool" do
     @class.new("test/stage/").rename_all(&@upcasetx.new)
     File.should exists "test/stage/FOO/BAR/BAZ.jpg"
     File.should exists "test/stage/FOO/BAR2/BAZ1.gif"
@@ -31,15 +50,7 @@ describe Tankobon::StagedDirectory do
 
   it "should sanitize every file in the stage in a bottom up fashion" do
     tx = @upcasetx.new
-    args = %w{
-      test/stage/foo/bar2/baz2.foo
-      test/stage/foo/bar2/baz1.gif
-      test/stage/foo/bar2
-      test/stage/foo/bar/baz.jpg
-      test/stage/foo/bar
-      test/stage/foo
-    }
-    args.each do |arg|
+    @files.each do |arg|
       File.should_receive(:rename).with(
         arg, 
         File.join(
@@ -49,11 +60,23 @@ describe Tankobon::StagedDirectory do
     @class.new("test/stage/").rename_all(&tx)
   end
 
-  it "should list images in the stage" do
+  it "should list all the images in the stage" do
     @class.new("test/stage/").images.should =~ %w{
       test/stage/foo/bar/baz.jpg
       test/stage/foo/bar2/baz1.gif
     }
+  end
+
+  it "should rename very image in the stage" do
+    @class.new("test/stage/").rename(:images, &@upcasetx.new)
+    File.should exists "test/stage/foo/bar/BAZ.jpg"
+    File.should exists "test/stage/foo/bar2/baz1.gif"
+  end
+
+  it "should rename very image in the stage and be cool" do
+    @class.new("test/stage/").rename_images(&@upcasetx.new)
+    File.should exists "test/stage/foo/bar/BAZ.jpg"
+    File.should exists "test/stage/foo/bar2/baz1.gif"
   end
 
   it "should move images to a directory" do
