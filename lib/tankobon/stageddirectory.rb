@@ -22,6 +22,7 @@ module Tankobon
     
     def mv_images_to_root
       mv_images_to @stage
+      self
     end
     
     def clean
@@ -40,8 +41,10 @@ module Tankobon
       Dir.glob(File.join(@stage, "**", images_wildcard))
     end
     
-    def convert_images(converter=KindleDXConverter)
-      # todo
+    def convert_images(&conversion)
+      images.each do |file|
+        yield(file) if block_given?
+      end
     end
     
     def method_missing(name, *args, &block)

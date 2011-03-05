@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Tankobon::StagedDirectory do
   before :all do
     @class = Tankobon::StagedDirectory
-    @upcasetx = Class.new(Tankobon::Transform) do
+    @minustx = Class.new(Tankobon::Transform) do
       def transform(input); "#{input}-"; end
     end
     @files = %w{
@@ -35,21 +35,21 @@ describe Tankobon::StagedDirectory do
   end
 
   it "should rename every file in the stage" do
-    @class.new("test/stage/").rename(:all, &@upcasetx.new)
+    @class.new("test/stage/").rename(:all, &@minustx.new)
     File.should exists "test/stage/foo-/bar-/baz-.jpg"
     File.should exists "test/stage/foo-/bar2-/baz1-.gif"
     File.should exists "test/stage/foo-/bar2-/baz2-.foo"
   end
   
   it "should rename every file in the stage and be cool" do
-    @class.new("test/stage/").rename_all(&@upcasetx.new)
+    @class.new("test/stage/").rename_all(&@minustx.new)
     File.should exists "test/stage/foo-/bar-/baz-.jpg"
     File.should exists "test/stage/foo-/bar2-/baz1-.gif"
     File.should exists "test/stage/foo-/bar2-/baz2-.foo"
   end
 
   it "should sanitize every file in the stage in a bottom up fashion" do
-    tx = @upcasetx.new
+    tx = @minustx.new
     @files.each do |arg|
       File.should_receive(:rename).with(
         arg, 
@@ -68,13 +68,13 @@ describe Tankobon::StagedDirectory do
   end
 
   it "should rename very image in the stage" do
-    @class.new("test/stage/").rename(:images, &@upcasetx.new)
+    @class.new("test/stage/").rename(:images, &@minustx.new)
     File.should exists "test/stage/foo/bar/baz-.jpg"
     File.should exists "test/stage/foo/bar2/baz1-.gif"
   end
 
   it "should rename very image in the stage and be cool" do
-    @class.new("test/stage/").rename_images(&@upcasetx.new)
+    @class.new("test/stage/").rename_images(&@minustx.new)
     File.should exists "test/stage/foo/bar/baz-.jpg"
     File.should exists "test/stage/foo/bar2/baz1-.gif"
   end
