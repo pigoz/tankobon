@@ -1,57 +1,60 @@
 module Tankobon
   class Application
     
-    acts_as_options_map
-    add_default :batch, nil
-    add_default :dir, Dir.pwd
-    add_default :im, true
-    
-    def initialize(&block)
-      @filename_count = 0
-      @options = {}
-      FileUtils.mkdir_p Tankobon::WORK_PATH unless 
-        File.exists? Tankobon::WORK_PATH
-      apply_defaults!()
-      block.arity < 1 ? self.instance_eval(&block) : block.call(self) if
-        block_given?
+    def initialize
+      no_batch()
     end
     
-    def clear!
-      FileUtils.rm_rf Tankobon::WORK_PATH
-      FileUtils.mkdir_p Tankobon::WORK_PATH unless 
-        File.exists? Tankobon::WORK_PATH
+    def batch(name)
+      if name then
+        @batch = name
+        @archive = batched_class(Archive)
+        @directory = batched_class(Directory)
+      else
+        no_batch()
+      end
+      self
     end
     
-    def setup_option_batch!
-      return if get(:batch).nil?
-      FileUtils.mkdir_p File.join(Tankobon::WORK_PATH, get(:batch)) unless 
-        File.exists? File.join(Tankobon::WORK_PATH, get(:batch))
-    end
-    
-    def rename_batch!(archive)
-      @filename_count = archive.filename_count
-      Dir.foreach(archive.directory) do |file|
-        next if file =~ /^\..*$/
-        File.rename(File.join(archive.directory, file), \
-        File.join(Tankobon::WORK_PATH, get(:batch), file))
+    def with(ary)
+      @staged_ary = ary.map do |elem|
+        obj = File.archive?(elem) ? @archive : @directory
+        obj.new(elem).to_stage
       end
     end
     
-    def process_files!
-      get(:files).each do |archive|
-        next unless 
-          ['.zip', '.cbz', '.rar', '.cbr', nil]
-          .include? File.basename_ext(archive)[1]
-          
-        Tankobon::Archive.new(File.join(get(:dir), archive), @filename_count) do |a|
-          a.transfer(self, [:colorspace, :size])
-          a.sanitize!
-          a.process_images! if get(:im)
-          rename_batch! a unless get(:batch).nil?
-        end # / Tankobon::Archive
-        
+    def sanitize(transforms = [SanitizeTransform, SequenceTransform])
+      staged_elems.each do |sd|
+        transforms.each {|tx| sd.rename(&tx.new)}
+        sd.mv_images_to_root.clean
+        converters.each {|tx| sd.convert_images(&tx.new)}
+      end
+      self
+    end
+    
+    def convert(converters = [KindleDXConverter])
+      staged_elems.each do |sd|
+        converters.each {|tx| sd.convert_images(&tx.new)}
+      end
+      self
+    end
+    
+    private
+    def batched_class(klass)
+      Class.new(klass)
+        def stage_root; super.stage_root + @batch; end
       end
     end
     
+    def no_batch
+      @batch = nil
+      @archive = Archive
+      @directory = Directory
+    end
+    
+    def staged_elems
+      raise "You called sanitize or convert before with." unless @staged_ary
+      @batch ? File.dirname(@staged_ary[0]) : @staged_ary
+    end
   end
 end

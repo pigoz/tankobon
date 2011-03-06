@@ -31,4 +31,12 @@ class File
   def self.image_extensions
     ['jpg', 'jpeg', 'png', 'gif']
   end
+  
+  def self.archive?(file)
+    archive_extensions.include? File.extname(file).tail
+  end
+  
+  def self.archive_extensions
+    ['zip', 'rar', 'cbz', 'cbr']
+  end
 end

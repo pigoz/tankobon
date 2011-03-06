@@ -47,4 +47,12 @@ describe File do
     File.should be_image 'test/random/path/image.png'
     File.should_not be_image 'test/random/path/not_image'
   end
+  
+  it "should recognize archives" do
+    File.should be_archive 'test/random/path/archive.zip'
+    File.should be_archive 'test/random/path/archive.cbz'
+    File.should be_archive 'test/random/path/archive.rar'
+    File.should be_archive 'test/random/path/archive.cbr'
+    File.should_not be_archive 'test/random/path/not_archive'
+  end
 end
