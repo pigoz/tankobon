@@ -18,10 +18,10 @@ describe Tankobon::Stageable do
   it "should stage to the correct directory" do
     Tankobon::Stageable.new("foo").stage.should == 
       Pathname.new('~/tankobon2/foo')
-
+      
     Tankobon::Stageable.new("foo.bar").stage.should == 
       Pathname.new('~/tankobon2/foo')
-
+      
     Tankobon::Stageable.new("foo.bar.baz").stage.should == 
       Pathname.new('~/tankobon2/foo.bar')
   end

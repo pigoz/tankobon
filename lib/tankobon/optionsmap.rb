@@ -8,15 +8,15 @@ end
 module OptionsMap
   
   module ClassMethods
-
+    
     def add_default(key, value)
       instance_variable_set(:@defaults, {}) if 
         instance_variable_get(:@defaults).nil?
       instance_variable_get(:@defaults)[key] = value
     end
-
+    
   end #/ ClassMethods
-
+  
   module InstanceMethods
   
     def set(key, value)
@@ -30,7 +30,7 @@ module OptionsMap
         EVAL
       )
     end
-  
+    
     def get(key)  
       o = options
       begin
@@ -44,7 +44,7 @@ module OptionsMap
       instance_variable_get(:@options) or 
         instance_variable_set(:@options, {}) and instance_variable_get(:@options)
     end
-  
+    
     def transfer(obj, filter=nil)
       return if obj.nil? or obj.options.nil?
       result = obj.options.inject(self.options) do |r, (k, v)|
@@ -57,7 +57,7 @@ module OptionsMap
     def defaults
       self.class.instance_variable_get(:@defaults)
     end
-  
+    
     def apply_defaults!
       self.class.instance_variable_get(:@defaults).each do |key, val|
         set key, val

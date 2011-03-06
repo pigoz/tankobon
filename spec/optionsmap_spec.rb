@@ -5,7 +5,7 @@ describe OptionsMap do
   class TestKey
     acts_as_options_map
     add_default :key, :value
-
+    
     def setup_option_key!
     end
   end

@@ -14,25 +14,25 @@ module Tankobon
       @seq = seq
       @padding = padding
     end
-
+    
     def pad(num)
       "%0#{@padding}d" % num
     end
-
+    
     def transform(input)
       pad(@seq += 1)
     end
   end
-
+  
   class SanitizeTransform  < Transform
     def initialize(padding=5)
       @padding = padding
     end
-
+    
     def pad(num)
       "%0#{@padding}d-" % num
     end
-
+    
     def transform(input)
       if not input =~ /[0-9]+/ then
         "#{pad(0)}#{input}"

@@ -5,19 +5,19 @@ module Tankobon
     end
     
     def self.progress(progress)
-      cr = "\r"           
+      cr = "\r"
       clear = "\e[0K"
       reset = cr + clear
       print "#{reset}"
       print "#{progress}"
       $stdout.flush
     end
-
+    
     def self.done()
-      cr = "\r"           
+      cr = "\r"
       clear = "\e[0K"
       reset = cr + clear
-
+      
       print " Done.\n"
       $stdout.flush
     end

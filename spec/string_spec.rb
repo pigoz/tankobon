@@ -7,5 +7,5 @@ describe String do
   
   it "should extract the rest with tail" do
     "hello".tail().should == "ello"
-  end  
+  end
 end
