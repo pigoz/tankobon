@@ -6,6 +6,7 @@ require 'tankobon/ext/dir'
 require 'tankobon/ext/file'
 require 'tankobon/optionsmap'
 require 'tankobon/transform'
+require 'tankobon/converter'
 require 'tankobon/version'
 
 module Tankobon

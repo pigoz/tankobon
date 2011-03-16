@@ -23,11 +23,11 @@ module Tankobon
     end
     
     def rotation(file)
-      will_rotate? ? "-rotate 90" : ""
+      will_rotate?(file) ? "-rotate 90" : ""
     end
     
     def convert(file)
-      %x[convert "#{filename}" -format #{format} #{rotation} \
+      %x[convert "#{file}" -format #{format} #{rotation(file)} \
         -colorspace #{colorspace} -resize #{size} -background white \
         -gravity center -extent #{size} "#{converted_name(file)}"
       ]
