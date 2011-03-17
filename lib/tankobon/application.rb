@@ -2,7 +2,7 @@ module Tankobon
   class Application
     
     def initialize
-      no_batch()
+      no_batch
     end
     
     def batch(name)
@@ -11,9 +11,13 @@ module Tankobon
         @archive = batched_class(Archive)
         @directory = batched_class(Directory)
       else
-        no_batch()
+        no_batch
       end
       self
+    end
+    
+    def with_base(base, ary)
+      with(ary.map{|x| File.join(base, x)})
     end
     
     def with(ary)
@@ -21,13 +25,13 @@ module Tankobon
         obj = File.archive?(elem) ? @archive : @directory
         obj.new(elem).to_stage
       end
+      self
     end
     
     def sanitize(transforms = [SanitizeTransform, SequenceTransform])
       staged_elems.each do |sd|
-        transforms.each {|tx| sd.rename(&tx.new)}
+        transforms.each {|tx| sd.rename_all(&tx.new)}
         sd.mv_images_to_root.clean
-        converters.each {|tx| sd.convert_images(&tx.new)}
       end
       self
     end
@@ -41,7 +45,7 @@ module Tankobon
     
     private
     def batched_class(klass)
-      Class.new(klass)
+      Class.new(klass) do
         def stage_root; super.stage_root + @batch; end
       end
     end

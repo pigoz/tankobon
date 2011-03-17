@@ -15,15 +15,19 @@ describe Tankobon::Stageable do
     end
   end
   
+  it "should stage to an absolute path"do
+    Tankobon::Stageable.new("foo.bar.baz").stage.should be_absolute
+  end
+  
   it "should stage to the correct directory" do
     Tankobon::Stageable.new("foo").stage.should == 
-      Pathname.new('~/tankobon2/foo')
+      Pathname.new('~/tankobon2/foo').expand_path
       
     Tankobon::Stageable.new("foo.bar").stage.should == 
-      Pathname.new('~/tankobon2/foo')
+      Pathname.new('~/tankobon2/foo').expand_path
       
     Tankobon::Stageable.new("foo.bar.baz").stage.should == 
-      Pathname.new('~/tankobon2/foo.bar')
+      Pathname.new('~/tankobon2/foo.bar').expand_path
   end
   
   it "should return the StagedDirectory when calling to_stage" do

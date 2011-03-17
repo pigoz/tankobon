@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+$:.unshift File.join(File.dirname(File.dirname(__FILE__)), "lib")
 
 require "rubygems"
 require "tankobon"
@@ -18,10 +19,10 @@ end
 
 begin
   if ARGV.length.eql? 1 then
-    Tankobon::Application.new do
+    recipe do
       eval(File.new(File.expand_path(ARGV[0])).read,
                     binding, __FILE__, __LINE__)
-    end.process_files!
+    end
     exit
   else
     Tankobon::CLI.message "Please provide a recipe file."

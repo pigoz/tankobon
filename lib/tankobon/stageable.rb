@@ -7,11 +7,15 @@ module Tankobon
     end
     
     def stage_root
-      Pathname.new("~/tankobon2")
+      Pathname.new("~/tankobon2").expand_path
     end
     
     def stage
       stage_root + @stageable.basename('.*')
+    end
+    
+    def stageable
+      @stageable.expand_path
     end
     
     def to_stage(&block)
