@@ -21,24 +21,24 @@ module Tankobon
     end
     
     def mv_images_to_root
-      mv_images_to @stage
+      mv_images_to stage
       self
     end
     
     def clean
-      Dir.glob(@stage + "*").each do |file|
+      Dir.glob(stage + "*").each do |file|
         FileUtils.rm_r(file) unless File.image?(file)
       end
       self
     end
     
     def all
-      Dir.glob(File.join(@stage, "**", "*")).reverse
+      join_stage Dir.chdir(stage){ Dir.glob(File.join("**", "*")).reverse }
     end
     
     def images
       images_wildcard = "*.{#{File.image_extensions.join(",")}}"
-      Dir.glob(File.join(@stage, "**", images_wildcard))
+      join_stage Dir.chdir(stage){ Dir.glob(File.join("**", images_wildcard)) }
     end
     
     def convert_images(&conversion)
@@ -53,6 +53,11 @@ module Tankobon
       elsif
         super
       end
+    end
+    
+    private
+    def join_stage(ary)
+      ary.map{|x| stage + x}.map(&:to_s)
     end
   end
 end
