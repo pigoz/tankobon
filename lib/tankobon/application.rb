@@ -30,7 +30,7 @@ module Tankobon
     
     def sanitize(transforms = [SanitizeTransform, SequenceTransform])
       staged_elems.each do |sd|
-        transforms.each {|tx| sd.rename_all(&tx.new)}
+        transforms.each {|tx| sd.rename_images(&tx.new)}
         sd.mv_images_to_root.clean
       end
       self

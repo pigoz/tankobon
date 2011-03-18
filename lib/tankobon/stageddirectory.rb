@@ -33,12 +33,14 @@ module Tankobon
     end
     
     def all
-      join_stage Dir.chdir(stage){ Dir.glob(File.join("**", "*")).reverse }
+      join_stage Dir.chdir(stage){ Dir.glob(File.join("**", "*")) }.sort.reverse
     end
     
     def images
       images_wildcard = "*.{#{File.image_extensions.join(",")}}"
-      join_stage Dir.chdir(stage){ Dir.glob(File.join("**", images_wildcard)) }
+      join_stage(Dir.chdir(stage){
+        Dir.glob(File.join("**", images_wildcard))
+      }).sort
     end
     
     def convert_images(&conversion)
