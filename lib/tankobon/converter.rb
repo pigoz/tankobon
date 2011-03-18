@@ -40,7 +40,7 @@ module Tankobon
     end
     
     def converted_name(file)
-      File.join(File.dirname(file), "#{File.splitbase[0]}.#{format}")
+      File.join(File.dirname(file), "#{File.splitbase(file)[0]}.#{format}")
     end
   end
   

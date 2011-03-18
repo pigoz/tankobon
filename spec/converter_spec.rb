@@ -19,4 +19,8 @@ describe Tankobon::Converter do
     @obj.should_receive("`").with(/^identify/).and_return("20x10")
     @obj.will_rotate?("foo").should be true
   end
+  
+  it "should know the converted name of an image" do
+    @obj.send(:converted_name, "/foo/bar.gif").should == "/foo/bar.jpg"
+  end
 end
