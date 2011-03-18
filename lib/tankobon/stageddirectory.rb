@@ -26,21 +26,23 @@ module Tankobon
     end
     
     def clean
-      Dir.glob(stage + "*").each do |file|
+      all_in_root.each do |file|
         FileUtils.rm_r(file) unless File.image?(file)
       end
       self
     end
     
     def all
-      join_stage Dir.chdir(stage){ Dir.glob(File.join("**", "*")) }.sort.reverse
+      join_stage stage_glob(File.join("**", "*")).sort.reverse
     end
     
     def images
       images_wildcard = "*.{#{File.image_extensions.join(",")}}"
-      join_stage(Dir.chdir(stage){
-        Dir.glob(File.join("**", images_wildcard))
-      }).sort
+      join_stage stage_glob(File.join("**", images_wildcard)).sort
+    end
+    
+    def all_in_root
+      join_stage stage_glob("*").sort
     end
     
     def convert_images(&conversion)
@@ -58,6 +60,10 @@ module Tankobon
     end
     
     private
+    def stage_glob(pattern)
+      Dir.chdir(stage){ Dir.glob(pattern) }
+    end
+    
     def join_stage(ary)
       ary.map{|x| stage + x}.map(&:to_s)
     end
