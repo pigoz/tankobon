@@ -1,3 +1,9 @@
-puts 'recipe'
-with([File.expand_path('~/Downloads/Death Note/Death_Note_v01[orangetangerine].zip')])
-puts 'recipe2'
+files = <<-FILES
+Eden - It's An Endless World! v03 (2006) (case-DCP).zip
+Eden - It's An Endless World! v04 (2006) (case-DCP).zip
+FILES
+.split("\n").each {|s| s.strip!}
+
+with_base '~/Downloads/Eden/', files
+sanitize
+convert
