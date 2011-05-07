@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   #
   s.author = 'Stefano Pigozzi'
   s.email = 'stefano.pigozzi@gmail.com'
-  s.homepage = 'http://stefanopigozzi.com'
+  s.homepage = 'https://github.com/pigoz/tankobon'
   #
   s.files = Dir.glob("**/{bin,lib}/**/*")
   s.executables  = ['tankobon']
